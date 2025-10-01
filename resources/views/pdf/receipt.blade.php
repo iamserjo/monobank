@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Платіжна інструкція № {{ $check->pdf_uuid }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <style>
         @page {
             margin: 0;
@@ -17,7 +20,7 @@
         }
 
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: Inter, DejaVu Sans, sans-serif;
             font-size: 11pt;
             line-height: 1.4;
             color: #000;
@@ -103,9 +106,9 @@
         }
 
         .title {
-            font-size: 18pt;
+            font-size: 15pt;
             font-weight: bold;
-            margin-bottom: 25px;
+            margin-bottom: 7px;
         }
 
         .section {
@@ -113,9 +116,9 @@
         }
 
         .section-title {
-            font-size: 12pt;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 15pt;
+            font-weight: 600;
+            margin-bottom: 6px;
         }
 
         .info-table {
@@ -124,17 +127,19 @@
         }
 
         .info-row {
-            margin-bottom: 8px;
+            margin-bottom: 2px;
         }
 
         .info-label {
             display: inline-block;
             width: 47%;
+            font-weight: 400;
+            font-size: 17px;
         }
 
         .info-value {
             display: inline-block;
-            width: 63%;
+            width: 50%;
             font-weight: bold;
         }
 
@@ -196,10 +201,10 @@
             font-style: italic;
         }
         .pdf-header{
-            margin-left: -36px;
-            margin-top: 15px;
-            width: 780px;
-            height: 75px;
+            margin-left: -49px;
+            margin-top: 12px;
+            width: 791px;
+            height: 77px;
         }
     </style>
 </head>
