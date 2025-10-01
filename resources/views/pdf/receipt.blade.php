@@ -20,11 +20,18 @@
         }
 
         body {
-            font-family: Inter, DejaVu Sans, sans-serif;
+            font-family: 'DejaVu Sans', sans-serif;
             font-size: 11pt;
             line-height: 1.4;
             color: #000;
             padding: 0;
+        }
+
+        /* Use Inter font for HTML preview only */
+        @media screen {
+            body {
+                font-family: Inter, 'DejaVu Sans', sans-serif;
+            }
         }
 
         /* Common page container used for both HTML preview and PDF */
@@ -73,15 +80,14 @@
         }
 
         .logo-section {
-            display: table;
             width: 100%;
             margin-bottom: 30px;
+            overflow: hidden;
         }
 
         .logo-left {
-            display: table-cell;
+            float: left;
             width: 50%;
-            vertical-align: top;
         }
 
         .logo-text {
@@ -97,10 +103,9 @@
         }
 
         .bank-info {
-            display: table-cell;
+            float: right;
             width: 50%;
             text-align: right;
-            vertical-align: top;
             font-size: 9pt;
             line-height: 1.6;
         }
@@ -113,12 +118,14 @@
 
         .section {
             margin-bottom: 25px;
+            page-break-inside: avoid;
         }
 
         .section-title {
             font-size: 15pt;
             font-weight: 600;
             margin-bottom: 6px;
+            page-break-after: avoid;
         }
 
         .info-table {
@@ -127,23 +134,18 @@
         }
 
         .info-row {
-            margin-bottom: 2px;
+            margin-bottom: 8px;
+            width: 100%;
         }
 
         .info-label {
-            display: inline-block;
-            width: 47%;
             font-weight: 400;
-            font-size: 17px;
-            vertical-align: top;
+            font-size: 14pt;
         }
 
         .info-value {
-            font-size: 19px;
-            display: inline-block;
-            width: 50%;
-            font-weight: 550;
-            vertical-align: top;
+            font-size: 14pt;
+            font-weight: bold;
         }
 
         .divider {
@@ -153,22 +155,23 @@
 
         .footer {
             margin-top: 40px;
-            display: table;
             width: 100%;
+            overflow: hidden;
         }
 
         .signature-section {
-            display: table-row;
+            width: 100%;
+            overflow: hidden;
         }
 
         .signature-left {
-            display: table-cell;
+            float: left;
             width: 50%;
             padding-top: 30px;
         }
 
         .signature-right {
-            display: table-cell;
+            float: right;
             width: 50%;
             text-align: right;
             padding-top: 30px;
@@ -220,20 +223,20 @@
     <div class="section">
         <div class="section-title">Платник</div>
         <div class="info-row">
-            <span class="info-label">Ім'я</span>
-            <span class="info-value">{{ $payer_name }}</span>
+            <div class="info-label">Ім'я</div>
+            <div class="info-value">{{ $payer_name }}</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Банк</span>
-            <span class="info-value">{{ $check->sender_bankname ?? 'АТ УНІВЕРСАЛ БАНК' }}</span>
+            <div class="info-label">Банк</div>
+            <div class="info-value">{{ $check->sender_bankname ?? 'АТ УНІВЕРСАЛ БАНК' }}</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Код</span>
-            <span class="info-value">{{ $check->sender_taxid ?? $payer_code }}</span>
+            <div class="info-label">Код</div>
+            <div class="info-value">{{ $check->sender_taxid ?? $payer_code }}</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Номер рахунку</span>
-            <span class="info-value">{{ $check->sender_account ?? $payer_account }}</span>
+            <div class="info-label">Номер рахунку</div>
+            <div class="info-value">{{ $check->sender_account ?? $payer_account }}</div>
         </div>
     </div>
 
@@ -242,20 +245,20 @@
     <div class="section">
         <div class="section-title">Отримувач</div>
         <div class="info-row">
-            <span class="info-label">Назва</span>
-            <span class="info-value">{{ $check->recipient }}</span>
+            <div class="info-label">Назва</div>
+            <div class="info-value">{{ $check->recipient }}</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Код</span>
-            <span class="info-value">{{ $recipient_code }}</span>
+            <div class="info-label">Код</div>
+            <div class="info-value">{{ $recipient_code }}</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Номер рахунку</span>
-            <span class="info-value">{{ $recipient_account }}</span>
+            <div class="info-label">Номер рахунку</div>
+            <div class="info-value">{{ $recipient_account }}</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Банк</span>
-            <span class="info-value">АТ "УНІВЕРСАЛ БАНК"</span>
+            <div class="info-label">Банк</div>
+            <div class="info-value">АТ "УНІВЕРСАЛ БАНК"</div>
         </div>
     </div>
 
@@ -264,24 +267,24 @@
     <div class="section">
         <div class="section-title">Деталі транзакції</div>
         <div class="info-row">
-            <span class="info-label">Сума (грн)</span>
-            <span class="info-value">{{ number_format($check->amount, 2, ',', ' ') }} ({{ $amount_in_words }})</span>
+            <div class="info-label">Сума (грн)</div>
+            <div class="info-value">{{ number_format($check->amount, 2, ',', ' ') }} ({{ $amount_in_words }})</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Комісія(грн)</span>
-            <span class="info-value">0,0</span>
+            <div class="info-label">Комісія(грн)</div>
+            <div class="info-value">0,0</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Дата і час складання</span>
-            <span class="info-value">{{ $check->date->format('d.m.Y H:i') }}</span>
+            <div class="info-label">Дата і час складання</div>
+            <div class="info-value">{{ $check->date->format('d.m.Y H:i') }}</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Дата виконання</span>
-            <span class="info-value">{{ $check->date->format('d.m.Y') }}</span>
+            <div class="info-label">Дата виконання</div>
+            <div class="info-value">{{ $check->date->format('d.m.Y') }}</div>
         </div>
         <div class="info-row">
-            <span class="info-label">Призначення платежу</span>
-            <span class="info-value">{{ $check->description }}</span>
+            <div class="info-label">Призначення платежу</div>
+            <div class="info-value">{{ $check->description }}</div>
         </div>
     </div>
 
