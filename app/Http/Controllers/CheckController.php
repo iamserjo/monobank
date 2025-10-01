@@ -34,17 +34,17 @@ class CheckController extends Controller
             ->with('success', 'Check created successfully.');
     }
 
-    public function show(Check $check)
+    public function show(Check $checkz)
     {
-        return view('checks.show', compact('check'));
+        return view('checks.show', compact('checkz'));
     }
 
-    public function edit(Check $check)
+    public function edit(Check $checkz)
     {
-        return view('checks.edit', compact('check'));
+        return view('checks.edit', ['check' => $checkz]);
     }
 
-    public function update(Request $request, Check $check)
+    public function update(Request $request, Check $checkz)
     {
         $validated = $request->validate([
             'sender' => 'required|string|max:255',
@@ -54,15 +54,15 @@ class CheckController extends Controller
             'description' => 'required|string',
         ]);
 
-        $check->update($validated);
+        $checkz->update($validated);
 
         return redirect()->route('checkz.index')
             ->with('success', 'Check updated successfully.');
     }
 
-    public function destroy(Check $check)
+    public function destroy(Check $checkz)
     {
-        $check->delete();
+        $checkz->delete();
 
         return redirect()->route('checkz.index')
             ->with('success', 'Check deleted successfully.');

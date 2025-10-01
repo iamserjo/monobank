@@ -138,14 +138,15 @@
         }
 
         .info-value {
+            font-size: 19px;
             display: inline-block;
             width: 50%;
-            font-weight: bold;
+            font-weight: 550;
         }
 
         .divider {
-            border-bottom: 1px solid #e0e0e0;
-            margin: 20px 0;
+            /*border-bottom: 1px solid #e0e0e0;*/
+            /*margin: 20px 0;*/
         }
 
         .footer {
@@ -234,7 +235,7 @@
         </div>
     </div>
 
-    <div class="divider"></div>
+    <div class="divider" style="margin: 31px 0;"></div>
 
     <div class="section">
         <div class="section-title">Отримувач</div>
@@ -256,7 +257,7 @@
         </div>
     </div>
 
-    <div class="divider"></div>
+    <div class="divider" style="margin: -1px 0;"></div>
 
     <div class="section">
         <div class="section-title">Деталі транзакції</div>
