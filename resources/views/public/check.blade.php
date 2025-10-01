@@ -73,9 +73,8 @@
             text-align: center
         }
         .split-line {
-            border-top: .5px solid #ccc;
-            margin: 24px 0;
-            width: 100%
+            margin: 22px 0;
+            width: 100%;
         }
         .list-item-value {
             color: #000;

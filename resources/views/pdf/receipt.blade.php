@@ -225,15 +225,15 @@
         </div>
         <div class="info-row">
             <span class="info-label">Банк</span>
-            <span class="info-value">АТ УНІВЕРСАЛ БАНК</span>
+            <span class="info-value">{{ $check->sender_bankname ?? 'АТ УНІВЕРСАЛ БАНК' }}</span>
         </div>
         <div class="info-row">
             <span class="info-label">Код</span>
-            <span class="info-value">{{ $payer_code }}</span>
+            <span class="info-value">{{ $check->sender_taxid ?? $payer_code }}</span>
         </div>
         <div class="info-row">
             <span class="info-label">Номер рахунку</span>
-            <span class="info-value">{{ $payer_account }}</span>
+            <span class="info-value">{{ $check->sender_account ?? $payer_account }}</span>
         </div>
     </div>
 

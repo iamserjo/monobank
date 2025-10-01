@@ -26,6 +26,9 @@ class CheckController extends Controller
             'amount' => 'required|integer|min:0',
             'date' => 'required|date',
             'description' => 'required|string',
+            'sender_bankname' => 'nullable|string|max:64',
+            'sender_account' => 'nullable|string|max:1000',
+            'sender_taxid' => 'nullable|string|max:65',
         ]);
 
         Check::create($validated);
@@ -52,6 +55,9 @@ class CheckController extends Controller
             'amount' => 'required|integer|min:0',
             'date' => 'required|date',
             'description' => 'required|string',
+            'sender_bankname' => 'nullable|string|max:64',
+            'sender_account' => 'nullable|string|max:1000',
+            'sender_taxid' => 'nullable|string|max:65',
         ]);
 
         $checkz->update($validated);

@@ -16,6 +16,9 @@ class Check extends Model
         'amount',
         'date',
         'description',
+        'sender_bankname',
+        'sender_account',
+        'sender_taxid',
     ];
 
     protected $casts = [

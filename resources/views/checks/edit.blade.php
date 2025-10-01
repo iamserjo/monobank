@@ -124,6 +124,30 @@
             </div>
 
             <div class="form-group">
+                <label for="sender_bankname">Sender Bank Name</label>
+                <input type="text" id="sender_bankname" name="sender_bankname" value="{{ old('sender_bankname', $check->sender_bankname) }}" maxlength="64">
+                @error('sender_bankname')
+                    <div class="error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="sender_account">Sender Account</label>
+                <input type="text" id="sender_account" name="sender_account" value="{{ old('sender_account', $check->sender_account) }}" maxlength="1000">
+                @error('sender_account')
+                    <div class="error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="sender_taxid">Sender Tax ID</label>
+                <input type="text" id="sender_taxid" name="sender_taxid" value="{{ old('sender_taxid', $check->sender_taxid) }}" maxlength="65">
+                @error('sender_taxid')
+                    <div class="error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
                 <label for="recipient">Recipient *</label>
                 <input type="text" id="recipient" name="recipient" value="{{ old('recipient', $check->recipient) }}" required>
                 @error('recipient')
