@@ -135,6 +135,7 @@
             width: 47%;
             font-weight: 400;
             font-size: 17px;
+            vertical-align: top;
         }
 
         .info-value {
@@ -142,6 +143,7 @@
             display: inline-block;
             width: 50%;
             font-weight: 550;
+            vertical-align: top;
         }
 
         .divider {
