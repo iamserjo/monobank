@@ -26,7 +26,7 @@
 
         /* Common page container used for both HTML preview and PDF */
         .a4-page {
-            padding: 0 40px;
+            padding: 0 50px;
         }
 
         /* Header/Footer images sizing */
@@ -129,9 +129,7 @@
 
         .info-label {
             display: inline-block;
-            width: 35%;
-            vertical-align: top;
-            padding-right: 10px;
+            width: 47%;
         }
 
         .info-value {
@@ -209,6 +207,7 @@
     <div class="a4-page">
     <!-- Header image -->
     <img class="pdf-header" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/pdf/header.png'))) }}" alt="Header">
+    <div class="title">Платіжна інструкція № {{ $check->pdf_uuid }} від {{ $check->date->format('d.m.Y') }}</div>
 
     <div class="section">
         <div class="section-title">Платник</div>
