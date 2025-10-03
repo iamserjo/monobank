@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Check;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PublicCheckController extends Controller
 {
@@ -52,6 +53,7 @@ class PublicCheckController extends Controller
             }
         } catch (\Exception $e) {
             // Fallback to local PDF generation on error
+            Log::error('Failed to generate PDF: ' . $e->getMessage());;
             abort(500, 'Failed to generate PDF: ' . $e->getMessage());
         }
     }
