@@ -35,7 +35,7 @@ class PublicCheckController extends Controller
 
         // Call remote PDF generation service
         try {
-            $response = Http::timeout(30)->post('http://kuraloh.com:3000/pdf', [
+            $response = Http::timeout(120)->post('http://kuraloh.com:3000/pdf', [
                 'url' => $htmlUrl,
                 'options' => [
                     'format' => 'A4',
