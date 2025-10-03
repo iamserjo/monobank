@@ -221,7 +221,7 @@
 <body>
     <div class="a4-page">
     <!-- Header image -->
-    <img class="pdf-header" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/pdf/header.png'))) }}" alt="Header">
+    <img class="pdf-header" src="{{ asset('images/pdf/header.png') }}" alt="Header">
     <div class="title">Платіжна інструкція № {{ $check->pdf_uuid }} від {{ $check->date->format('d.m.Y') }}</div>
 
     <div class="section">
@@ -296,7 +296,7 @@
         Реквізити платіжної інструкції підписані удосконаленим електронним підписом платника.
     </div>
     <!-- Footer image -->
-    <img class="pdf-footer" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/pdf/footer.png'))) }}" alt="Footer">
+    <img class="pdf-footer" src="{{ asset('images/pdf/footer.png') }}" alt="Footer">
     </div>
 </body>
 </html>
