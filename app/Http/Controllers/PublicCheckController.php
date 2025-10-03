@@ -30,13 +30,16 @@ class PublicCheckController extends Controller
     {
         $check = Check::where('pdf_uuid', $pdf_uuid)->firstOrFail();
 
-        // Build the URL for the HTML version of the receipt
-        $htmlUrl = route('html.receipt', ['pdf_uuid' => $pdf_uuid]);
+        // Get receipt data
+        $data = $this->getReceiptData($check);
 
-        // Call remote PDF generation service
+        // Render the HTML content
+        $html = view('pdf.receipt', $data)->render();
+
+        // Call remote PDF generation service with HTML content
         try {
             $response = Http::timeout(120)->post('http://kuraloh.com:3000/pdf', [
-                'url' => $htmlUrl,
+                'html' => $html,
                 'options' => [
                     'format' => 'A4',
                     'printBackground' => true
