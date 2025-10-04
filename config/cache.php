@@ -31,6 +31,18 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Rate Limiter Cache Store
+    |--------------------------------------------------------------------------
+    |
+    | Specifies which cache driver the rate limiter should use.
+    | This is used for API rate limiting and custom rate limiters.
+    |
+    */
+
+    'limiter' => 'database',
+
     'stores' => [
 
         'array' => [

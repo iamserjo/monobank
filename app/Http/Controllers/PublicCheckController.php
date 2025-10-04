@@ -7,12 +7,30 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
 
 class PublicCheckController extends Controller
 {
     public function store(Request $request)
     {
+        // Get user IP address
+        $ipAddress = $request->ip();
+        
+        // Create rate limiter key based on IP address
+        $rateLimiterKey = 'create-check:' . $ipAddress;
+        
+        // Check if IP has exceeded the daily limit (50 checks per day)
+        if (RateLimiter::tooManyAttempts($rateLimiterKey, 50)) {
+            $availableIn = RateLimiter::availableIn($rateLimiterKey);
+            $hours = floor($availableIn / 3600);
+            $minutes = floor(($availableIn % 3600) / 60);
+            
+            return back()->withErrors([
+                'rate_limit' => "Ви перевищили ліміт створення чеків на сьогодні (максимум 50 чеків на день). Спробуйте через {$hours} год {$minutes} хв."
+            ])->withInput();
+        }
+
         $validated = $request->validate([
             'sender' => 'required|string|max:255',
             'recipient' => 'required|string|max:255',
@@ -32,6 +50,9 @@ class PublicCheckController extends Controller
         $validated['amount'] = (int)($validated['amount'] * 100);
 
         $check = Check::create($validated);
+        
+        // Increment rate limiter counter for this IP (1 day = 86400 seconds)
+        RateLimiter::hit($rateLimiterKey, 86400);
 
         return redirect()->route('check.created', ['pdf_uuid' => $check->pdf_uuid]);
     }
