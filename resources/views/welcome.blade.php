@@ -52,10 +52,20 @@
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
             <main style="max-width: 1000px; margin: 0 auto; width: 100%;">
                 <div id="main-form-container" style="background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%); padding: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04); border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease;">
-                    <div style="margin-bottom: 35px; padding-bottom: 25px; border-bottom: 2px solid #e8eaed; position: relative;">
-                        <div style="position: absolute; top: 0; left: 0; width: 60px; height: 4px; background: linear-gradient(90deg, #0066cc, #0052a3); border-radius: 2px;"></div>
-                        <div style="font-size: 22px; font-weight: 600; color: #1a1a1a; margin-top: 12px; letter-spacing: -0.3px;">
-                            Платіжна інструкція № <span id="payment-uuid" style="font-family: 'Courier New', monospace; color: #0066cc; background: rgba(0, 102, 204, 0.08); padding: 4px 8px; border-radius: 4px; font-weight: 600;">................</span> від <span id="payment-date" style="color: #555; font-weight: 500;">{{ now()->format('d.m.Y') }}</span>
+                    <div style="margin-bottom: 35px; padding: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; border: 2px solid #0066cc; position: relative; box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);">
+                        <div style="position: absolute; top: 0; left: 0; width: 80px; height: 5px; background: linear-gradient(90deg, #0066cc, #0052a3); border-radius: 12px 0 0 0;"></div>
+                        <div style="font-size: 20px; font-weight: 700; color: #1a1a1a; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            Платіжна інструкція
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 18px; font-weight: 700; color: #2c3e50;">№</span>
+                                <span id="payment-uuid" style="font-family: 'Courier New', monospace; font-size: 20px; font-weight: 700; color: #0066cc; background: #ffffff; padding: 8px 16px; border-radius: 8px; border: 2px solid #0066cc; box-shadow: 0 2px 4px rgba(0, 102, 204, 0.15); letter-spacing: 1px;">................</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 18px; font-weight: 700; color: #2c3e50;">від</span>
+                                <span id="payment-date" style="font-size: 20px; color: #1a1a1a; font-weight: 700; background: #ffffff; padding: 8px 16px; border-radius: 8px; border: 2px solid #dee2e6;">{{ now()->format('d.m.Y') }}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -444,6 +454,17 @@
                     justify-content: center;
                     padding: 14px 20px !important;
                 }
+
+                #payment-uuid {
+                    font-size: 16px !important;
+                    padding: 6px 12px !important;
+                    letter-spacing: 0.5px !important;
+                }
+
+                #payment-date {
+                    font-size: 16px !important;
+                    padding: 6px 12px !important;
+                }
             }
 
             @media (max-width: 480px) {
@@ -459,42 +480,6 @@
                     width: 28px !important;
                     height: 28px !important;
                     font-size: 14px !important;
-                }
-            }
-
-            /* Dark mode support */
-            @media (prefers-color-scheme: dark) {
-                #main-form-container {
-                    background: linear-gradient(145deg, #1a1a1a 0%, #252525 100%) !important;
-                    border-color: rgba(255,255,255,0.1) !important;
-                }
-
-                .form-section {
-                    background: #222 !important;
-                    border-color: rgba(255,255,255,0.08) !important;
-                }
-
-                .form-input {
-                    background: #1a1a1a !important;
-                    border-color: rgba(255,255,255,0.15) !important;
-                    color: #e8e8e8 !important;
-                }
-
-                .form-input:focus {
-                    background: #252525 !important;
-                    color: #ffffff !important;
-                }
-
-                label {
-                    color: #d0d0d0 !important;
-                }
-
-                h1, h2 {
-                    color: #ffffff !important;
-                }
-
-                p {
-                    color: #a0a0a0 !important;
                 }
             }
 
