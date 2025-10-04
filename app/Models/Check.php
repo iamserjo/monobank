@@ -38,6 +38,16 @@ class Check extends Model
                 $check->pdf_uuid = self::generatePdfUuid();
             }
         });
+
+        // Invalidate cached PDF when check is updated
+        static::updated(function ($check) {
+            $check->invalidatePdfCache();
+        });
+
+        // Invalidate cached PDF when check is deleted
+        static::deleted(function ($check) {
+            $check->invalidatePdfCache();
+        });
     }
 
     /**
@@ -64,6 +74,26 @@ class Check extends Model
         } while (self::where('pdf_uuid', $uuid)->exists());
 
         return $uuid;
+    }
+
+    /**
+     * Invalidate the cached PDF for this check
+     */
+    public function invalidatePdfCache(): bool
+    {
+        if (!$this->pdf_uuid) {
+            return false;
+        }
+
+        $cachePath = "pdfs/receipt_{$this->pdf_uuid}.pdf";
+        
+        if (\Storage::disk('local')->exists($cachePath)) {
+            \Storage::disk('local')->delete($cachePath);
+            \Log::info("Invalidated cached PDF for check {$this->pdf_uuid}");
+            return true;
+        }
+
+        return false;
     }
 }
 

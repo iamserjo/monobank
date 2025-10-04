@@ -6,6 +6,7 @@ use App\Models\Check;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PublicCheckController extends Controller
 {
@@ -30,6 +31,42 @@ class PublicCheckController extends Controller
     {
         $check = Check::where('pdf_uuid', $pdf_uuid)->firstOrFail();
 
+        // Define cache path
+        $cachePath = "pdfs/receipt_{$pdf_uuid}.pdf";
+        $filename = "receipt_{$pdf_uuid}.pdf";
+        
+        // Check if cached PDF exists - serve it directly if it does
+        if (Storage::disk('local')->exists($cachePath)) {
+            Log::info("Serving cached PDF for {$pdf_uuid}");
+            
+            return Storage::disk('local')->response($cachePath, $filename, [
+                'Content-Type' => 'application/pdf',
+                'Cache-Control' => 'public, max-age=31536000',
+            ]);
+        }
+
+        // Generate new PDF if not cached
+        Log::info("Generating new PDF for {$pdf_uuid}");
+        $pdfContent = $this->generateNewPdf($check, $pdf_uuid);
+        
+        // Cache the PDF
+        try {
+            Storage::disk('local')->put($cachePath, $pdfContent);
+            Log::info("Successfully cached PDF for {$pdf_uuid} at {$cachePath}");
+        } catch (\Exception $e) {
+            Log::error("Failed to cache PDF for {$pdf_uuid}: " . $e->getMessage());
+            // Continue even if caching fails
+        }
+
+        // Return the generated PDF
+        return response($pdfContent, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', "inline; filename=\"{$filename}\"")
+            ->header('Cache-Control', 'public, max-age=31536000');
+    }
+
+    private function generateNewPdf($check, $pdf_uuid)
+    {
         // Build the URL for the HTML version of the receipt
         $htmlUrl = route('html.receipt', ['pdf_uuid' => $pdf_uuid]);
 
@@ -44,17 +81,15 @@ class PublicCheckController extends Controller
             ]);
 
             if ($response->successful()) {
-                return response($response->body(), 200)
-                    ->header('Content-Type', 'application/pdf')
-                    ->header('Content-Disposition', "inline; filename=\"receipt_{$pdf_uuid}.pdf\"");
+                return $response->body();
             } else {
-                // Fallback to local PDF generation if remote service fails
-                return $this->generateLocalPdf($check, $pdf_uuid);
+                Log::warning("Remote PDF service failed, falling back to local generation");
+                return $this->generateLocalPdfContent($check, $pdf_uuid);
             }
         } catch (\Exception $e) {
-            // Fallback to local PDF generation on error
-            Log::error('Failed to generate PDF: ' . $e->getMessage());;
-            abort(500, 'Failed to generate PDF: ' . $e->getMessage());
+            Log::error('Failed to generate PDF via remote service: ' . $e->getMessage());
+            Log::info('Falling back to local PDF generation');
+            return $this->generateLocalPdfContent($check, $pdf_uuid);
         }
     }
 
@@ -64,6 +99,14 @@ class PublicCheckController extends Controller
         $pdf = Pdf::loadView('pdf.receipt', $data);
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream("receipt_{$pdf_uuid}.pdf");
+    }
+
+    private function generateLocalPdfContent($check, $pdf_uuid)
+    {
+        $data = $this->getReceiptData($check);
+        $pdf = Pdf::loadView('pdf.receipt', $data);
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->output();
     }
 
     private function getReceiptData($check)
