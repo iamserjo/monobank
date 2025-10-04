@@ -50,198 +50,465 @@
             @endif
         </header>
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <main style="max-width: 900px; margin: 0 auto;">
-                <div style="background: #fff; padding: 40px; box-shadow: 0 2mm 8mm rgba(0,0,0,0.1);">
-                    <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
-                        <div style="font-size: 20px; font-weight: 600; color: #333;">
-                            Платіжна інструкція № <span id="payment-uuid" style="font-family: monospace; color: #0066cc;">................</span> від <span id="payment-date">{{ now()->format('d.m.Y') }}</span>
+            <main style="max-width: 1000px; margin: 0 auto; width: 100%;">
+                <div id="main-form-container" style="background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%); padding: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04); border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                    <div style="margin-bottom: 35px; padding-bottom: 25px; border-bottom: 2px solid #e8eaed; position: relative;">
+                        <div style="position: absolute; top: 0; left: 0; width: 60px; height: 4px; background: linear-gradient(90deg, #0066cc, #0052a3); border-radius: 2px;"></div>
+                        <div style="font-size: 22px; font-weight: 600; color: #1a1a1a; margin-top: 12px; letter-spacing: -0.3px;">
+                            Платіжна інструкція № <span id="payment-uuid" style="font-family: 'Courier New', monospace; color: #0066cc; background: rgba(0, 102, 204, 0.08); padding: 4px 8px; border-radius: 4px; font-weight: 600;">................</span> від <span id="payment-date" style="color: #555; font-weight: 500;">{{ now()->format('d.m.Y') }}</span>
                         </div>
                     </div>
 
-                    <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">Створити платіжну інструкцію</h1>
+                    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 12px; color: #1a1a1a; letter-spacing: -0.5px;">Створити платіжну інструкцію</h1>
+                    <p style="color: #6c757d; font-size: 16px; margin-bottom: 32px; line-height: 1.6;">Заповніть форму нижче для створення нової платіжної інструкції. Всі поля, відмічені зірочкою (*), є обов'язковими.</p>
 
                     @if (session('success'))
-                        <div style="background: #efe; border: 1px solid #cfc; padding: 15px; margin-bottom: 20px; border-radius: 4px; color: #060;">
-                            {{ session('success') }}
+                        <div class="success-message" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border: 1px solid #28a745; border-left: 4px solid #28a745; padding: 20px; margin-bottom: 24px; border-radius: 8px; color: #155724; box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15); animation: slideIn 0.4s ease-out;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                                <svg style="width: 24px; height: 24px; flex-shrink: 0;" fill="none" stroke="#28a745" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span style="font-weight: 600; font-size: 16px;">{{ session('success') }}</span>
+                            </div>
                             @if (session('check'))
-                                <br>
-                                <a href="{{ route('public.check', session('check')->string_id) }}" style="color: #06c; text-decoration: underline;">Переглянути чек</a>
-                                |
-                                <a href="{{ route('pdf.receipt', session('check')->pdf_uuid) }}" style="color: #06c; text-decoration: underline;">Завантажити PDF</a>
+                                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(40, 167, 69, 0.2); display: flex; gap: 16px;">
+                                    <a href="{{ route('public.check', session('check')->string_id) }}" class="btn-link" style="color: #0066cc; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+                                        <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        Переглянути чек
+                                    </a>
+                                    <a href="{{ route('pdf.receipt', session('check')->pdf_uuid) }}" class="btn-link" style="color: #0066cc; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+                                        <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        Завантажити PDF
+                                    </a>
+                                </div>
                             @endif
                         </div>
                     @endif
 
-                    <form action="{{ route('check.store') }}" method="POST" style="font-family: Inter, DejaVu Sans, sans-serif; font-size: 14px;">
+                    <form action="{{ route('check.store') }}" method="POST" id="payment-form" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px;">
                         @csrf
 
-                        <div style="margin-bottom: 30px;">
-                            <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">Платник</h2>
+                        <div class="form-section" style="margin-bottom: 40px; background: white; padding: 28px; border-radius: 12px; border: 1px solid #e8eaed; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.3s ease;">
+                            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1a1a1a; display: flex; align-items: center; gap: 10px;">
+                                <span style="width: 32px; height: 32px; background: linear-gradient(135deg, #0066cc, #0052a3); color: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700;">1</span>
+                                Платник
+                            </h2>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Ім'я платника <span style="color: red;">*</span></label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Ім'я платника <span style="color: #dc3545;">*</span></label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="sender" value="{{ old('sender', 'володимир путін') }}" required
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc;" 
+                                        onfocus="this.style.borderColor='#0066cc'; this.style.boxShadow='0 0 0 3px rgba(0,102,204,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('sender')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Банк</label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Банк</label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="sender_bankname" value="{{ old('sender_bankname', 'АТ "УНІВЕРСАЛ БАНК"') }}"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc;" 
+                                        onfocus="this.style.borderColor='#0066cc'; this.style.boxShadow='0 0 0 3px rgba(0,102,204,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('sender_bankname')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Код</label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Код</label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="sender_taxid" value="{{ old('sender_taxid', '0000000000') }}"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc; font-family: 'Courier New', monospace;" 
+                                        onfocus="this.style.borderColor='#0066cc'; this.style.boxShadow='0 0 0 3px rgba(0,102,204,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('sender_taxid')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Номер рахунку</label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Номер рахунку</label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="sender_account" value="{{ old('sender_account', 'UA217544505502639508336219228') }}"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc; font-family: 'Courier New', monospace;" 
+                                        onfocus="this.style.borderColor='#0066cc'; this.style.boxShadow='0 0 0 3px rgba(0,102,204,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('sender_account')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
                         </div>
 
-                        <div style="border-top: 1px solid #e0e0e0; margin: 30px 0;"></div>
+                        <div class="form-section" style="margin-bottom: 40px; background: white; padding: 28px; border-radius: 12px; border: 1px solid #e8eaed; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.3s ease;">
+                            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1a1a1a; display: flex; align-items: center; gap: 10px;">
+                                <span style="width: 32px; height: 32px; background: linear-gradient(135deg, #28a745, #20c997); color: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700;">2</span>
+                                Отримувач
+                            </h2>
 
-                        <div style="margin-bottom: 30px;">
-                            <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">Отримувач</h2>
-
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Назва <span style="color: red;">*</span></label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Назва <span style="color: #dc3545;">*</span></label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="recipient" value="{{ old('recipient', 'Володимир Зеленський') }}" required
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc;" 
+                                        onfocus="this.style.borderColor='#28a745'; this.style.boxShadow='0 0 0 3px rgba(40,167,69,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('recipient')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Код</label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Код</label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="recipient_taxid" value="{{ old('recipient_taxid', '2142454791') }}"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc; font-family: 'Courier New', monospace;" 
+                                        onfocus="this.style.borderColor='#28a745'; this.style.boxShadow='0 0 0 3px rgba(40,167,69,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('recipient_taxid')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Номер рахунку</label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Номер рахунку</label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="recipient_account" value="{{ old('recipient_account', 'UA12346856708289109112368825') }}"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc; font-family: 'Courier New', monospace;" 
+                                        onfocus="this.style.borderColor='#28a745'; this.style.boxShadow='0 0 0 3px rgba(40,167,69,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('recipient_account')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Банк</label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Банк</label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="recipient_bankname" value="{{ old('recipient_bankname', 'АТ "УНІВЕРСАЛ БАНК"') }}"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc;" 
+                                        onfocus="this.style.borderColor='#28a745'; this.style.boxShadow='0 0 0 3px rgba(40,167,69,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('recipient_bankname')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
                         </div>
 
-                        <div style="border-top: 1px solid #e0e0e0; margin: 30px 0;"></div>
+                        <div class="form-section" style="margin-bottom: 40px; background: white; padding: 28px; border-radius: 12px; border: 1px solid #e8eaed; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.3s ease;">
+                            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1a1a1a; display: flex; align-items: center; gap: 10px;">
+                                <span style="width: 32px; height: 32px; background: linear-gradient(135deg, #ffc107, #ff9800); color: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700;">3</span>
+                                Деталі транзакції
+                            </h2>
 
-                        <div style="margin-bottom: 30px;">
-                            <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">Деталі транзакції</h2>
-
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Сума (грн) <span style="color: red;">*</span></label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="number" id="amount" name="amount" value="{{ old('amount', '1300') }}" required min="0" step="0.01"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Сума (грн) <span style="color: #dc3545;">*</span></label>
+                                <div class="input-wrapper" style="position: relative;">
+                                    <div style="position: relative;">
+                                        <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #6c757d; font-weight: 600; font-size: 16px; pointer-events: none;">₴</span>
+                                        <input type="number" id="amount" name="amount" value="{{ old('amount', '1300') }}" required min="0" step="0.01"
+                                            class="form-input" style="width: 100%; padding: 12px 16px 12px 36px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 16px; font-weight: 600; transition: all 0.3s ease; background: #fafbfc;" 
+                                            onfocus="this.style.borderColor='#ffc107'; this.style.boxShadow='0 0 0 3px rgba(255,193,7,0.1)'; this.style.background='#ffffff';"
+                                            onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
+                                    </div>
                                     @error('amount')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
-                                    <div id="amount-words" style="margin-top: 8px; font-size: 13px; color: #666; font-style: italic;"></div>
+                                    <div id="amount-words" style="margin-top: 10px; padding: 10px 12px; background: rgba(255,193,7,0.08); border-radius: 6px; font-size: 14px; color: #856404; font-style: italic; border-left: 3px solid #ffc107;"></div>
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Комісія (грн)</label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Комісія (грн)</label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="text" name="commission" value="0,0" readonly
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; background: #f5f5f5;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; background: #f5f7f9; color: #6c757d; cursor: not-allowed;">
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Дата і час складання <span style="color: red;">*</span></label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Дата і час складання <span style="color: #dc3545;">*</span></label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="datetime-local" name="date" value="{{ old('date', now()->format('Y-m-d\TH:i')) }}" required
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc;" 
+                                        onfocus="this.style.borderColor='#ffc107'; this.style.boxShadow='0 0 0 3px rgba(255,193,7,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('date')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Дата виконання</label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Дата виконання</label>
+                                <div class="input-wrapper" style="position: relative;">
                                     <input type="date" name="execution_date" value="{{ old('execution_date', now()->format('Y-m-d')) }}"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fafbfc;" 
+                                        onfocus="this.style.borderColor='#ffc107'; this.style.boxShadow='0 0 0 3px rgba(255,193,7,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">
                                     @error('execution_date')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500; vertical-align: top; padding-top: 8px;">Призначення платежу <span style="color: red;">*</span></label>
-                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <textarea name="description" required rows="3"
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; resize: vertical;">{{ old('description', 'Репарації') }}</textarea>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50; font-size: 14px;">Призначення платежу <span style="color: #dc3545;">*</span></label>
+                                <div class="input-wrapper" style="position: relative;">
+                                    <textarea name="description" required rows="4"
+                                        class="form-input" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; resize: vertical; background: #fafbfc; line-height: 1.6;" 
+                                        onfocus="this.style.borderColor='#ffc107'; this.style.boxShadow='0 0 0 3px rgba(255,193,7,0.1)'; this.style.background='#ffffff';"
+                                        onblur="this.style.borderColor='#e1e4e8'; this.style.boxShadow='none'; this.style.background='#fafbfc';">{{ old('description', 'Репарації') }}</textarea>
                                     @error('description')
-                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                        <div class="error-message" style="color: #dc3545; font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                                            <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
                             </div>
                         </div>
 
-                        <div style="margin-top: 30px;">
-                            <button type="submit"
-                                style="background: #0066cc; color: #fff; padding: 12px 30px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        <div style="margin-top: 40px; padding-top: 32px; border-top: 2px solid #e8eaed;">
+                            <button type="submit" id="submit-btn"
+                                style="background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); color: #fff; padding: 16px 40px; border: none; border-radius: 10px; font-size: 17px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.25); transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px; letter-spacing: 0.3px;"
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 102, 204, 0.35)';"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(0, 102, 204, 0.25)';"
+                                onmousedown="this.style.transform='translateY(0px)';"
+                                onmouseup="this.style.transform='translateY(-2px)';">
+                                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
                                 Створити платіжну інструкцію
                             </button>
+                            <p style="margin-top: 16px; color: #6c757d; font-size: 14px; line-height: 1.6;">
+                                <svg style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Після створення ви зможете переглянути чек та завантажити його у форматі PDF.
+                            </p>
                         </div>
                     </form>
                 </div>
             </main>
         </div>
+
+        <style>
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.7;
+                }
+            }
+
+            .form-section:hover {
+                box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+                transform: translateY(-2px);
+            }
+
+            #main-form-container:hover {
+                box-shadow: 0 12px 45px rgba(0,0,0,0.10), 0 3px 15px rgba(0,0,0,0.05) !important;
+            }
+
+            .btn-link:hover {
+                color: #0052a3 !important;
+                text-decoration: underline !important;
+            }
+
+            #submit-btn:active {
+                transform: scale(0.98) !important;
+            }
+
+            .form-input:focus {
+                outline: none;
+            }
+
+            /* Smooth scroll */
+            html {
+                scroll-behavior: smooth;
+            }
+
+            /* Better selection color */
+            ::selection {
+                background: rgba(0, 102, 204, 0.2);
+                color: #1a1a1a;
+            }
+
+            /* Loading animation for button */
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .loading {
+                pointer-events: none;
+                opacity: 0.7;
+            }
+
+            .loading svg {
+                animation: spin 1s linear infinite;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                #main-form-container {
+                    padding: 30px 20px !important;
+                    border-radius: 12px !important;
+                }
+
+                .form-section {
+                    padding: 20px !important;
+                }
+
+                h1 {
+                    font-size: 26px !important;
+                }
+
+                h2 {
+                    font-size: 18px !important;
+                }
+
+                .form-input {
+                    font-size: 16px !important; /* Prevents zoom on iOS */
+                }
+
+                #submit-btn {
+                    width: 100%;
+                    justify-content: center;
+                    padding: 14px 20px !important;
+                }
+            }
+
+            @media (max-width: 480px) {
+                #main-form-container {
+                    padding: 20px 16px !important;
+                }
+
+                h1 {
+                    font-size: 22px !important;
+                }
+
+                .form-section h2 span {
+                    width: 28px !important;
+                    height: 28px !important;
+                    font-size: 14px !important;
+                }
+            }
+
+            /* Dark mode support */
+            @media (prefers-color-scheme: dark) {
+                #main-form-container {
+                    background: linear-gradient(145deg, #1a1a1a 0%, #252525 100%) !important;
+                    border-color: rgba(255,255,255,0.1) !important;
+                }
+
+                .form-section {
+                    background: #222 !important;
+                    border-color: rgba(255,255,255,0.08) !important;
+                }
+
+                .form-input {
+                    background: #1a1a1a !important;
+                    border-color: rgba(255,255,255,0.15) !important;
+                    color: #e8e8e8 !important;
+                }
+
+                .form-input:focus {
+                    background: #252525 !important;
+                    color: #ffffff !important;
+                }
+
+                label {
+                    color: #d0d0d0 !important;
+                }
+
+                h1, h2 {
+                    color: #ffffff !important;
+                }
+
+                p {
+                    color: #a0a0a0 !important;
+                }
+            }
+
+            /* Print styles */
+            @media print {
+                #main-form-container {
+                    box-shadow: none !important;
+                }
+
+                #submit-btn {
+                    display: none !important;
+                }
+            }
+        </style>
 
         <div style="display: none;">
             <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
@@ -604,6 +871,139 @@
                 if (amountInput) {
                     amountInput.addEventListener('input', updateAmountWords);
                 }
+
+                // Form submission enhancement
+                const form = document.getElementById('payment-form');
+                const submitBtn = document.getElementById('submit-btn');
+                
+                if (form && submitBtn) {
+                    form.addEventListener('submit', function(e) {
+                        // Add loading state
+                        submitBtn.classList.add('loading');
+                        submitBtn.innerHTML = `
+                            <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+                                <path d="M12 2a10 10 0 0110 10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                            </svg>
+                            Обробка...
+                        `;
+                    });
+                }
+
+                // Animate form sections on scroll/load
+                const formSections = document.querySelectorAll('.form-section');
+                formSections.forEach((section, index) => {
+                    section.style.opacity = '0';
+                    section.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        section.style.transition = 'all 0.5s ease';
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0)';
+                    }, 100 + (index * 150));
+                });
+
+                // Input validation feedback
+                const inputs = document.querySelectorAll('.form-input');
+                inputs.forEach(input => {
+                    // Add checkmark on valid filled inputs
+                    input.addEventListener('blur', function() {
+                        if (this.value && this.checkValidity()) {
+                            const wrapper = this.closest('.input-wrapper');
+                            if (wrapper && !wrapper.querySelector('.check-icon')) {
+                                const checkIcon = document.createElement('div');
+                                checkIcon.className = 'check-icon';
+                                checkIcon.style.cssText = 'position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #28a745; pointer-events: none;';
+                                checkIcon.innerHTML = '<svg style="width: 20px; height: 20px;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>';
+                                wrapper.appendChild(checkIcon);
+                                
+                                // Animate in
+                                checkIcon.style.opacity = '0';
+                                checkIcon.style.transform = 'translateY(-50%) scale(0.5)';
+                                setTimeout(() => {
+                                    checkIcon.style.transition = 'all 0.3s ease';
+                                    checkIcon.style.opacity = '1';
+                                    checkIcon.style.transform = 'translateY(-50%) scale(1)';
+                                }, 10);
+                            }
+                        }
+                    });
+
+                    // Remove checkmark when editing
+                    input.addEventListener('focus', function() {
+                        const wrapper = this.closest('.input-wrapper');
+                        if (wrapper) {
+                            const checkIcon = wrapper.querySelector('.check-icon');
+                            if (checkIcon) {
+                                checkIcon.remove();
+                            }
+                        }
+                    });
+                });
+
+                // Add smooth scroll to first error
+                const firstError = document.querySelector('.error-message');
+                if (firstError) {
+                    setTimeout(() => {
+                        firstError.closest('.form-group').scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                    }, 100);
+                }
+
+                // Success message auto-hide after 10 seconds
+                const successMessage = document.querySelector('.success-message');
+                if (successMessage) {
+                    setTimeout(() => {
+                        successMessage.style.transition = 'all 0.5s ease';
+                        successMessage.style.opacity = '0';
+                        successMessage.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            successMessage.style.display = 'none';
+                        }, 500);
+                    }, 10000);
+                }
+
+                // Add ripple effect to button
+                submitBtn.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255, 255, 255, 0.5);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s ease-out;
+                        pointer-events: none;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+
+                // Add ripple animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes ripple {
+                        to {
+                            transform: scale(2);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
             });
         </script>
     </body>
