@@ -131,7 +131,7 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Назва <span style="color: red;">*</span></label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="text" name="recipient" value="{{ old('recipient', 'володимир зеленський') }}" required
+                                    <input type="text" name="recipient" value="{{ old('recipient', 'Володимир Зеленський') }}" required
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('recipient')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
@@ -142,7 +142,7 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Код</label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="text" name="recipient_taxid" value="{{ old('recipient_taxid', '4122434727') }}"
+                                    <input type="text" name="recipient_taxid" value="{{ old('recipient_taxid', '2142454791') }}"
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('recipient_taxid')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
@@ -153,7 +153,7 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Номер рахунку</label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="text" name="recipient_account" value="{{ old('recipient_account', 'UA217368122082247091700654821') }}"
+                                    <input type="text" name="recipient_account" value="{{ old('recipient_account', 'UA12346856708289109112368825') }}"
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('recipient_account')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
@@ -504,6 +504,7 @@
 
             function numberToWordsUkrainian(number) {
                 const ones = ['', 'один', 'два', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім', "дев'ять"];
+                const onesFeminine = ['', 'одна', 'дві', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім', "дев'ять"];
                 const tens = ['', '', 'двадцять', 'тридцять', 'сорок', "п'ятдесят", 'шістдесят', 'сімдесят', 'вісімдесят', "дев'яносто"];
                 const hundreds = ['', 'сто', 'двісті', 'триста', 'чотириста', "п'ятсот", 'шістсот', 'сімсот', 'вісімсот', "дев'ятсот"];
                 const teens = ['десять', 'одинадцять', 'дванадцять', 'тринадцять', 'чотирнадцять', "п'ятнадцять", 'шістнадцять', 'сімнадцять', 'вісімнадцять', "дев'ятнадцять"];
@@ -532,6 +533,7 @@
                         thousands = 0;
                     }
                     if (thousands > 0) {
+                        // Use feminine forms for thousands (тисяча is feminine)
                         if (thousands == 1) {
                             result += 'одна ';
                         } else if (thousands == 2) {
@@ -559,13 +561,14 @@
                     grn = 0;
                 }
 
+                // Use feminine forms for 1 and 2 when followed by currency (гривня is feminine)
                 if (grn > 0) {
-                    result += ones[grn] + ' ';
+                    result += onesFeminine[grn] + ' ';
                 }
 
                 // Get proper word form for hryvnias
                 const grnForm = getCurrencyForm(Math.floor(number), ['гривня', 'гривні', 'гривень']);
-                
+
                 // Get proper word form for kopiykas
                 const kopForm = getCurrencyForm(kop, ['копійка', 'копійки', 'копійок']);
 
