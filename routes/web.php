@@ -5,8 +5,11 @@ use App\Http\Controllers\CheckController;
 use App\Http\Controllers\PublicCheckController;
 
 Route::get('/', function () {
-    return redirect('https://monobank.ua/');
+    return view('welcome');
 });
+
+// Store new check from public form
+Route::post('/check/store', [PublicCheckController::class, 'store'])->name('check.store');
 
 // Admin panel for checks CRUD
 Route::prefix('system')->group(function () {

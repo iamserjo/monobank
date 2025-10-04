@@ -4,12 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Check;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PublicCheckController extends Controller
 {
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'sender' => 'required|string|max:255',
+            'recipient' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:0',
+            'date' => 'required|date',
+            'description' => 'required|string|max:1000',
+            'sender_bankname' => 'nullable|string|max:64',
+            'sender_account' => 'nullable|string|max:1000',
+            'sender_taxid' => 'nullable|string|max:65',
+        ]);
+
+        // Convert amount to integer (kopiyka)
+        $validated['amount'] = (int)($validated['amount'] * 100);
+
+        $check = Check::create($validated);
+
+        return redirect('/')
+            ->with('success', 'Платіжну інструкцію успішно створено!')
+            ->with('check', $check);
+    }
+
     public function show($string_id)
     {
         $check = Check::where('string_id', $string_id)->firstOrFail();
