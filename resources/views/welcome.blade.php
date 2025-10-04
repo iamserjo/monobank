@@ -52,6 +52,12 @@
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
             <main style="max-width: 900px; margin: 0 auto;">
                 <div style="background: #fff; padding: 40px; box-shadow: 0 2mm 8mm rgba(0,0,0,0.1);">
+                    <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+                        <div style="font-size: 20px; font-weight: 600; color: #333;">
+                            Платіжна інструкція № <span id="payment-uuid" style="font-family: monospace; color: #0066cc;">................</span> від <span id="payment-date">{{ now()->format('d.m.Y') }}</span>
+                        </div>
+                    </div>
+
                     <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">Створити платіжну інструкцію</h1>
 
                     @if (session('success'))
@@ -75,7 +81,7 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Ім'я платника <span style="color: red;">*</span></label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="text" name="sender" value="{{ old('sender') }}" required 
+                                    <input type="text" name="sender" value="{{ old('sender', 'володимир путін') }}" required
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('sender')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
@@ -86,7 +92,7 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Банк</label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="text" name="sender_bankname" value="{{ old('sender_bankname', 'АТ "УНІВЕРСАЛ БАНК"') }}" 
+                                    <input type="text" name="sender_bankname" value="{{ old('sender_bankname', 'АТ "УНІВЕРСАЛ БАНК"') }}"
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('sender_bankname')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
@@ -97,7 +103,7 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Код</label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="text" name="sender_taxid" value="{{ old('sender_taxid', '0000000000') }}" 
+                                    <input type="text" name="sender_taxid" value="{{ old('sender_taxid', '0000000000') }}"
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('sender_taxid')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
@@ -108,7 +114,7 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Номер рахунку</label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="text" name="sender_account" value="{{ old('sender_account', 'UA217544505502639508336219228') }}" 
+                                    <input type="text" name="sender_account" value="{{ old('sender_account', 'UA217544505502639508336219228') }}"
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('sender_account')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
@@ -125,9 +131,42 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Назва <span style="color: red;">*</span></label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="text" name="recipient" value="{{ old('recipient', 'Банк АТ "УНІВЕРСАЛ БАНК"') }}" required 
+                                    <input type="text" name="recipient" value="{{ old('recipient', 'володимир зеленський') }}" required
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('recipient')
+                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: inline-block; width: 200px; font-weight: 500;">Код</label>
+                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                                    <input type="text" name="recipient_taxid" value="{{ old('recipient_taxid', '4122434727') }}"
+                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                    @error('recipient_taxid')
+                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: inline-block; width: 200px; font-weight: 500;">Номер рахунку</label>
+                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                                    <input type="text" name="recipient_account" value="{{ old('recipient_account', 'UA217368122082247091700654821') }}"
+                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                    @error('recipient_account')
+                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: inline-block; width: 200px; font-weight: 500;">Банк</label>
+                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                                    <input type="text" name="recipient_bankname" value="{{ old('recipient_bankname', 'АТ "УНІВЕРСАЛ БАНК"') }}"
+                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                    @error('recipient_bankname')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -142,18 +181,27 @@
                             <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500;">Сума (грн) <span style="color: red;">*</span></label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="number" name="amount" value="{{ old('amount') }}" required min="0" step="0.01" 
+                                    <input type="number" id="amount" name="amount" value="{{ old('amount', '1300') }}" required min="0" step="0.01"
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('amount')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
                                     @enderror
+                                    <div id="amount-words" style="margin-top: 8px; font-size: 13px; color: #666; font-style: italic;"></div>
                                 </div>
                             </div>
 
                             <div style="margin-bottom: 15px;">
-                                <label style="display: inline-block; width: 200px; font-weight: 500;">Дата і час <span style="color: red;">*</span></label>
+                                <label style="display: inline-block; width: 200px; font-weight: 500;">Комісія (грн)</label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <input type="datetime-local" name="date" value="{{ old('date', now()->format('Y-m-d\TH:i')) }}" required 
+                                    <input type="text" name="commission" value="0,0" readonly
+                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; background: #f5f5f5;">
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: inline-block; width: 200px; font-weight: 500;">Дата і час складання <span style="color: red;">*</span></label>
+                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                                    <input type="datetime-local" name="date" value="{{ old('date', now()->format('Y-m-d\TH:i')) }}" required
                                         style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     @error('date')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
@@ -162,10 +210,21 @@
                             </div>
 
                             <div style="margin-bottom: 15px;">
+                                <label style="display: inline-block; width: 200px; font-weight: 500;">Дата виконання</label>
+                                <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
+                                    <input type="date" name="execution_date" value="{{ old('execution_date', now()->format('Y-m-d')) }}"
+                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                    @error('execution_date')
+                                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
                                 <label style="display: inline-block; width: 200px; font-weight: 500; vertical-align: top; padding-top: 8px;">Призначення платежу <span style="color: red;">*</span></label>
                                 <div style="display: inline-block; width: calc(100% - 220px); vertical-align: top;">
-                                    <textarea name="description" required rows="3" 
-                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; resize: vertical;">{{ old('description', 'Возврат долга') }}</textarea>
+                                    <textarea name="description" required rows="3"
+                                        style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; resize: vertical;">{{ old('description', 'Репарації') }}</textarea>
                                     @error('description')
                                         <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ $message }}</div>
                                     @enderror
@@ -174,7 +233,7 @@
                         </div>
 
                         <div style="margin-top: 30px;">
-                            <button type="submit" 
+                            <button type="submit"
                                 style="background: #0066cc; color: #fff; padding: 12px 30px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;">
                                 Створити платіжну інструкцію
                             </button>
@@ -341,5 +400,208 @@
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
         @endif
+
+        <script>
+            // UUID Generator with Matrix Effect
+            function generateUUID() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                const segments = [4, 4, 4, 4];
+                let uuid = segments.map(len => {
+                    let segment = '';
+                    for (let i = 0; i < len; i++) {
+                        segment += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    return segment;
+                }).join('-');
+                return uuid;
+            }
+
+            function getRandomChar() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                return chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+
+            function animateUUID() {
+                const uuidElement = document.getElementById('payment-uuid');
+                if (!uuidElement) return;
+
+                // Generate final UUID
+                const finalUUID = generateUUID();
+
+                // Matrix effect with easing (starts fast, slows down)
+                const animationDuration = 5000; // 5 seconds total
+                const startTime = Date.now();
+                let animationFrame;
+
+                function updateMatrix() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / animationDuration, 1);
+
+                    if (progress < 1) {
+                        // Calculate easing - starts fast, slows down exponentially
+                        // Using ease-out cubic: 1 - (1-x)^3
+                        const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+                        // For the full duration, all characters keep changing randomly
+                        const uuidArray = finalUUID.split('').map(char => {
+                            if (char === '-') {
+                                return '-'; // Keep dashes
+                            }
+                            // All other positions: random characters (Matrix effect!)
+                            return getRandomChar();
+                        });
+
+                        uuidElement.textContent = uuidArray.join('');
+
+                        // Calculate next delay with easing (slower at the end)
+                        // Start at 30ms, gradually increase to 200ms at the end
+                        const baseDelay = 30;
+                        const maxDelay = 200;
+                        const nextDelay = baseDelay + (maxDelay - baseDelay) * easeProgress;
+
+                        // Schedule next update with progressive delay
+                        setTimeout(() => {
+                            animationFrame = requestAnimationFrame(updateMatrix);
+                        }, nextDelay);
+                    } else {
+                        // Animation complete - lock in final UUID
+                        uuidElement.textContent = finalUUID;
+
+                        // Add a subtle highlight effect when it locks
+                        uuidElement.style.transition = 'all 0.3s ease';
+                        uuidElement.style.textShadow = '0 0 10px rgba(0, 102, 204, 0.5)';
+                        setTimeout(() => {
+                            uuidElement.style.textShadow = 'none';
+                        }, 500);
+                    }
+                }
+
+                // Start the animation
+                updateMatrix();
+            }
+
+            function getCurrencyForm(number, forms) {
+                // forms: [форма для 1, форма для 2-4, форма для 5-0 та 11-14]
+                // Example: ['гривня', 'гривні', 'гривень']
+                const absNumber = Math.abs(number);
+                const lastDigit = absNumber % 10;
+                const lastTwoDigits = absNumber % 100;
+
+                if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+                    return forms[2]; // гривень, копійок
+                }
+
+                if (lastDigit === 1) {
+                    return forms[0]; // гривня, копійка
+                }
+
+                if (lastDigit >= 2 && lastDigit <= 4) {
+                    return forms[1]; // гривні, копійки
+                }
+
+                return forms[2]; // гривень, копійок
+            }
+
+            function numberToWordsUkrainian(number) {
+                const ones = ['', 'один', 'два', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім', "дев'ять"];
+                const tens = ['', '', 'двадцять', 'тридцять', 'сорок', "п'ятдесят", 'шістдесят', 'сімдесят', 'вісімдесят', "дев'яносто"];
+                const hundreds = ['', 'сто', 'двісті', 'триста', 'чотириста', "п'ятсот", 'шістсот', 'сімсот', 'вісімсот', "дев'ятсот"];
+                const teens = ['десять', 'одинадцять', 'дванадцять', 'тринадцять', 'чотирнадцять', "п'ятнадцять", 'шістнадцять', 'сімнадцять', 'вісімнадцять', "дев'ятнадцять"];
+
+                if (number == 0) {
+                    return 'нуль гривень 00 копійок';
+                }
+
+                let result = '';
+                let grn = Math.floor(number);
+                let kop = Math.round((number - grn) * 100);
+                let kopString = String(kop).padStart(2, '0');
+
+                if (grn >= 1000) {
+                    let thousands = Math.floor(grn / 1000);
+                    if (thousands >= 100) {
+                        result += hundreds[Math.floor(thousands / 100)] + ' ';
+                        thousands = thousands % 100;
+                    }
+                    if (thousands >= 20) {
+                        result += tens[Math.floor(thousands / 10)] + ' ';
+                        thousands = thousands % 10;
+                    }
+                    if (thousands >= 10) {
+                        result += teens[thousands - 10] + ' ';
+                        thousands = 0;
+                    }
+                    if (thousands > 0) {
+                        if (thousands == 1) {
+                            result += 'одна ';
+                        } else if (thousands == 2) {
+                            result += 'дві ';
+                        } else {
+                            result += ones[thousands] + ' ';
+                        }
+                    }
+                    result += 'тисяч ';
+                    grn = grn % 1000;
+                }
+
+                if (grn >= 100) {
+                    result += hundreds[Math.floor(grn / 100)] + ' ';
+                    grn = grn % 100;
+                }
+
+                if (grn >= 20) {
+                    result += tens[Math.floor(grn / 10)] + ' ';
+                    grn = grn % 10;
+                }
+
+                if (grn >= 10) {
+                    result += teens[grn - 10] + ' ';
+                    grn = 0;
+                }
+
+                if (grn > 0) {
+                    result += ones[grn] + ' ';
+                }
+
+                // Get proper word form for hryvnias
+                const grnForm = getCurrencyForm(Math.floor(number), ['гривня', 'гривні', 'гривень']);
+                
+                // Get proper word form for kopiykas
+                const kopForm = getCurrencyForm(kop, ['копійка', 'копійки', 'копійок']);
+
+                result += grnForm + ' ' + kopString + ' ' + kopForm;
+
+                return result.trim();
+            }
+
+            function updateAmountWords() {
+                const amountInput = document.getElementById('amount');
+                const amountWordsDiv = document.getElementById('amount-words');
+
+                if (amountInput && amountWordsDiv) {
+                    const value = parseFloat(amountInput.value) || 0;
+                    if (value > 0) {
+                        amountWordsDiv.textContent = '(' + numberToWordsUkrainian(value) + ')';
+                    } else {
+                        amountWordsDiv.textContent = '';
+                    }
+                }
+            }
+
+            // Update on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                // Start UUID animation
+                animateUUID();
+
+                // Update amount words
+                updateAmountWords();
+
+                // Update on input change
+                const amountInput = document.getElementById('amount');
+                if (amountInput) {
+                    amountInput.addEventListener('input', updateAmountWords);
+                }
+            });
+        </script>
     </body>
 </html>

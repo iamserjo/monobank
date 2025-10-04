@@ -19,11 +19,16 @@ class Check extends Model
         'sender_bankname',
         'sender_account',
         'sender_taxid',
+        'recipient_taxid',
+        'recipient_account',
+        'recipient_bankname',
+        'execution_date',
     ];
 
     protected $casts = [
         'date' => 'datetime',
         'amount' => 'integer',
+        'execution_date' => 'date',
     ];
 
     protected static function boot()

@@ -1,0 +1,24 @@
+#Development Guidelines:
+  - Use PHP 8.2+ features where appropriate
+  - Follow Laravel conventions and best practices (laravel 12 or 11)
+  - Focus on creating code that provides excellent developer experience (DX), better autocompletion, type safety, and comprehensive docblocks
+
+#Coding Standards and Conventions:
+  - Class and Enum names: Use PascalCase (e.g., MyClass)
+  - Method names: Use camelCase (e.g., myMethod)
+  - Constants and Enum Cases names: Use SCREAMING_SNAKE_CASE (e.g., MY_CONSTANT)
+  - use events and listeners for business logic
+
+# LOOK UP DATABASE RECORDS
+if you need to find records in db: e.g. users id 1,2,3,4,5 run docker-compose exec laravel.test php artisan tinker --execute="print_r(DB::select('SELECT * FROM users WHERE id IN (?, ?, ?, ?, ?)', [1,2,3,4,5]));"
+if you want to see mysql structure of a table, you can run, e.g. show create table users: docker-compose exec  laravel.test php artisan tinker --execute="print_r(DB::select('SHOW CREATE TABLE users'));"
+if you need to run any query to see records in db run: docker-compose exec  laravel.test php artisan tinker --execute="print_r(DB::select('Your query with param = ?', [1]));" - params are optional
+
+
+run php artisan commands or create/run migrations using docker-compose exec laravel.test php artisan ...
+You can run commands php artisan via docker-compose exec laravel.test php artisan ...
+
+When you run laravel commands add to command -d max_execution_time=30
+
+we have null coalescing operator in php 8.2+ and you can use it like this: $var ?? 'default value' or you can use $var?->method();
+

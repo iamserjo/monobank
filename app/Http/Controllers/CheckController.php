@@ -29,6 +29,10 @@ class CheckController extends Controller
             'sender_bankname' => 'nullable|string|max:64',
             'sender_account' => 'nullable|string|max:1000',
             'sender_taxid' => 'nullable|string|max:65',
+            'recipient_taxid' => 'nullable|string|max:65',
+            'recipient_account' => 'nullable|string|max:1000',
+            'recipient_bankname' => 'nullable|string|max:64',
+            'execution_date' => 'nullable|date',
         ]);
 
         Check::create($validated);
@@ -58,6 +62,10 @@ class CheckController extends Controller
             'sender_bankname' => 'nullable|string|max:64',
             'sender_account' => 'nullable|string|max:1000',
             'sender_taxid' => 'nullable|string|max:65',
+            'recipient_taxid' => 'nullable|string|max:65',
+            'recipient_account' => 'nullable|string|max:1000',
+            'recipient_bankname' => 'nullable|string|max:64',
+            'execution_date' => 'nullable|date',
         ]);
 
         $checkz->update($validated);
