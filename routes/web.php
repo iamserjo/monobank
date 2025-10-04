@@ -11,6 +11,9 @@ Route::get('/', function () {
 // Store new check from public form
 Route::post('/check/store', [PublicCheckController::class, 'store'])->name('check.store');
 
+// Show check created success page
+Route::get('/show/{pdf_uuid}', [PublicCheckController::class, 'showCreated'])->name('check.created');
+
 // Admin panel for checks CRUD
 Route::prefix('system')->group(function () {
     Route::resource('checkz', CheckController::class);

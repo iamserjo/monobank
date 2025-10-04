@@ -33,9 +33,14 @@ class PublicCheckController extends Controller
 
         $check = Check::create($validated);
 
-        return redirect('/')
-            ->with('success', 'Платіжну інструкцію успішно створено!')
-            ->with('check', $check);
+        return redirect()->route('check.created', ['pdf_uuid' => $check->pdf_uuid]);
+    }
+
+    public function showCreated($pdf_uuid)
+    {
+        $check = Check::where('pdf_uuid', $pdf_uuid)->firstOrFail();
+        
+        return view('checks.created', compact('check'));
     }
 
     public function show($string_id)
