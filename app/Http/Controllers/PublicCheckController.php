@@ -165,8 +165,15 @@ class PublicCheckController extends Controller
 
     private function numberToWordsUkrainian($number)
     {
+        // Convert kopiyky to hryvnias and kopiyky
+        $grn = floor($number / 100);
+        $kop = $number % 100;
+
         $ones = [
             '', 'один', 'два', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім', "дев'ять"
+        ];
+        $onesFeminine = [
+            '', 'одна', 'дві', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім', "дев'ять"
         ];
         $tens = [
             '', '', 'двадцять', 'тридцять', 'сорок', "п'ятдесят", 'шістдесят', 'сімдесят', 'вісімдесят', "дев'яносто"
@@ -179,16 +186,17 @@ class PublicCheckController extends Controller
             "п'ятнадцять", 'шістнадцять', 'сімнадцять', 'вісімнадцять', "дев'ятнадцять"
         ];
 
-        if ($number == 0) {
+        if ($grn == 0 && $kop == 0) {
             return 'нуль гривень 00 копійок';
         }
 
         $result = '';
-        $grn = floor($number);
-        $kop = str_pad(round(($number - $grn) * 100), 2, '0', STR_PAD_LEFT);
 
+        // Thousands
         if ($grn >= 1000) {
             $thousands = floor($grn / 1000);
+            $thousandsWord = '';
+            
             if ($thousands >= 100) {
                 $result .= $hundreds[floor($thousands / 100)] . ' ';
                 $thousands = $thousands % 100;
@@ -199,27 +207,27 @@ class PublicCheckController extends Controller
             }
             if ($thousands >= 10) {
                 $result .= $teens[$thousands - 10] . ' ';
+                $thousandsWord = $this->getThousandsDeclension(0);
                 $thousands = 0;
             }
             if ($thousands > 0) {
-                if ($thousands == 1) {
-                    $result .= 'одна ';
-                } elseif ($thousands == 2) {
-                    $result .= 'дві ';
-                } else {
-                    $result .= $ones[$thousands] . ' ';
-                }
+                $result .= $onesFeminine[$thousands] . ' ';
+                $thousandsWord = $this->getThousandsDeclension($thousands);
+            } else if ($thousandsWord == '') {
+                $thousandsWord = $this->getThousandsDeclension(0);
             }
 
-            $result .= 'тисяч ';
+            $result .= $thousandsWord . ' ';
             $grn = $grn % 1000;
         }
 
+        // Hundreds
         if ($grn >= 100) {
             $result .= $hundreds[floor($grn / 100)] . ' ';
             $grn = $grn % 100;
         }
 
+        // Tens and ones
         if ($grn >= 20) {
             $result .= $tens[floor($grn / 10)] . ' ';
             $grn = $grn % 10;
@@ -234,9 +242,59 @@ class PublicCheckController extends Controller
             $result .= $ones[$grn] . ' ';
         }
 
-        $result .= 'гривень ' . $kop . ' копійок';
+        // Get the last digit of the original amount for declension
+        $lastDigit = floor($number / 100) % 10;
+        $lastTwoDigits = floor($number / 100) % 100;
+        
+        $result .= $this->getHryvniaDeclension($lastDigit, $lastTwoDigits) . ' ';
+        $result .= str_pad($kop, 2, '0', STR_PAD_LEFT) . ' ';
+        $result .= $this->getKopiykaDeclension($kop);
 
         return trim($result);
+    }
+
+    private function getThousandsDeclension($lastDigit)
+    {
+        if ($lastDigit == 1) {
+            return 'тисяча';
+        } elseif ($lastDigit >= 2 && $lastDigit <= 4) {
+            return 'тисячі';
+        } else {
+            return 'тисяч';
+        }
+    }
+
+    private function getHryvniaDeclension($lastDigit, $lastTwoDigits)
+    {
+        if ($lastTwoDigits >= 11 && $lastTwoDigits <= 14) {
+            return 'гривень';
+        }
+        
+        if ($lastDigit == 1) {
+            return 'гривня';
+        } elseif ($lastDigit >= 2 && $lastDigit <= 4) {
+            return 'гривні';
+        } else {
+            return 'гривень';
+        }
+    }
+
+    private function getKopiykaDeclension($kop)
+    {
+        $lastDigit = $kop % 10;
+        $lastTwoDigits = $kop % 100;
+        
+        if ($lastTwoDigits >= 11 && $lastTwoDigits <= 14) {
+            return 'копійок';
+        }
+        
+        if ($lastDigit == 1) {
+            return 'копійка';
+        } elseif ($lastDigit >= 2 && $lastDigit <= 4) {
+            return 'копійки';
+        } else {
+            return 'копійок';
+        }
     }
 }
 
